@@ -35,6 +35,13 @@ function normalizeCityName(city: string): string {
   return trimmedCity;
 }
 
+function buildWeatherUrl(apiKey: string): URL {
+  const url = new URL(WEATHER_API_BASE_URL);
+  url.searchParams.set('appid', apiKey);
+  url.searchParams.set('units', 'metric');
+  return url;
+}
+
 async function parseErrorResponse(response: Response): Promise<string> {
   try {
     const errorBody = (await response.json()) as OpenWeatherMapErrorResponse;
@@ -48,21 +55,10 @@ async function parseErrorResponse(response: Response): Promise<string> {
   return `Weather API request failed with status ${response.status}.`;
 }
 
-/**
- * Fetches current weather data from OpenWeatherMap for the given city name.
- *
- * @throws {WeatherServiceError} When the API key is missing, the city is invalid,
- * the network request fails, or the API returns an error response.
- */
-export async function fetchWeatherByCity(city: string): Promise<Weather> {
-  const apiKey = getApiKey();
-  const normalizedCity = normalizeCityName(city);
-
-  const url = new URL(WEATHER_API_BASE_URL);
-  url.searchParams.set('q', normalizedCity);
-  url.searchParams.set('appid', apiKey);
-  url.searchParams.set('units', 'metric');
-
+async function requestWeather(
+  url: URL,
+  notFoundMessage?: string,
+): Promise<Weather> {
   let response: Response;
 
   try {
@@ -74,11 +70,8 @@ export async function fetchWeatherByCity(city: string): Promise<Weather> {
     );
   }
 
-  if (response.status === 404) {
-    throw new WeatherServiceError(
-      `City "${normalizedCity}" not found.`,
-      'INVALID_CITY',
-    );
+  if (response.status === 404 && notFoundMessage) {
+    throw new WeatherServiceError(notFoundMessage, 'INVALID_CITY');
   }
 
   if (response.status === 401) {
@@ -97,10 +90,48 @@ export async function fetchWeatherByCity(city: string): Promise<Weather> {
 
   if (Number(data.cod) !== 200) {
     throw new WeatherServiceError(
-      `City "${normalizedCity}" not found.`,
-      'INVALID_CITY',
+      notFoundMessage ?? 'Weather data could not be retrieved.',
+      notFoundMessage ? 'INVALID_CITY' : 'API_ERROR',
     );
   }
 
   return data;
+}
+
+/**
+ * Fetches current weather data from OpenWeatherMap for the given city name.
+ *
+ * @throws {WeatherServiceError} When the API key is missing, the city is invalid,
+ * the network request fails, or the API returns an error response.
+ */
+export async function fetchWeatherByCity(city: string): Promise<Weather> {
+  const apiKey = getApiKey();
+  const normalizedCity = normalizeCityName(city);
+
+  const url = buildWeatherUrl(apiKey);
+  url.searchParams.set('q', normalizedCity);
+
+  return requestWeather(
+    url,
+    `City "${normalizedCity}" not found.`,
+  );
+}
+
+/**
+ * Fetches current weather data from OpenWeatherMap for the given coordinates.
+ *
+ * @throws {WeatherServiceError} When the API key is missing, the network request
+ * fails, or the API returns an error response.
+ */
+export async function fetchWeatherByCoordinates(
+  latitude: number,
+  longitude: number,
+): Promise<Weather> {
+  const apiKey = getApiKey();
+
+  const url = buildWeatherUrl(apiKey);
+  url.searchParams.set('lat', String(latitude));
+  url.searchParams.set('lon', String(longitude));
+
+  return requestWeather(url);
 }

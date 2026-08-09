@@ -1,5 +1,6 @@
 // Re-exports for model types and interfaces used across the app.
 
+export type { FavoriteCity } from './Favorite';
 export type {
   Weather,
   WeatherClouds,

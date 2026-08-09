@@ -1,0 +1,114 @@
+.auth-view {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem 1.5rem;
+}
+
+.auth-card {
+  width: min(100%, 420px);
+  padding: 2rem;
+  border-radius: 1rem;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+  border: 1px solid #e2e8f0;
+}
+
+.auth-card__title {
+  margin: 0;
+  text-align: center;
+  font-size: 2rem;
+  color: #0f172a;
+}
+
+.auth-card__subtitle {
+  margin: 0.75rem 0 1.5rem;
+  text-align: center;
+  color: #64748b;
+}
+
+.auth-card__toggle {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding: 0.25rem;
+  border-radius: 0.75rem;
+  background: #f1f5f9;
+}
+
+.auth-card__toggle-button {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 0.6rem;
+  background: transparent;
+  color: #475569;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-card__toggle-button.is-active {
+  background: #ffffff;
+  color: #0284c7;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+.auth-form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.auth-form__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.auth-form__input,
+.auth-form__submit {
+  border-radius: 0.75rem;
+  font: inherit;
+}
+
+.auth-form__input {
+  padding: 0.875rem 1rem;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
+}
+
+.auth-form__input:focus {
+  outline: 2px solid #38bdf8;
+  outline-offset: 2px;
+  border-color: #38bdf8;
+}
+
+.auth-form__input:disabled,
+.auth-form__submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.auth-form__error {
+  margin: 0;
+  padding: 0.875rem 1rem;
+  border-radius: 0.75rem;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.auth-form__submit {
+  margin-top: 0.5rem;
+  padding: 0.875rem 1.25rem;
+  border: none;
+  background: #0284c7;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-form__submit:hover:not(:disabled) {
+  background: #0369a1;
+}
