@@ -1,6 +1,5 @@
 .App {
   min-height: 100vh;
-  background: linear-gradient(180deg, #dbeafe 0%, #f8fafc 45%, #eff6ff 100%);
 }
 
 .app-loading {

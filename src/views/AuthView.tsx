@@ -27,7 +27,13 @@ export function AuthView() {
   };
 
   return (
-    <main className="auth-view">
+    <main
+      className="auth-view"
+      style={{
+        backgroundImage:
+          'linear-gradient(160deg, rgba(10, 15, 30, 0.72) 0%, rgba(15, 23, 42, 0.60) 100%), url(/backgrounds/default.png)',
+      }}
+    >
       <section className="auth-card">
         <h1 className="auth-card__title">Weather App</h1>
         <p className="auth-card__subtitle">
